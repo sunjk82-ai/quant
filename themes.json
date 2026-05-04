@@ -1,0 +1,26 @@
+{
+  "2026-05-03": [
+    {
+      "theme": "전력설비",
+      "stocks": [
+        {"code": "006340", "name": "대원전선", "is_leader": true},
+        {"code": "243840", "name": "선도전기", "is_leader": false}
+      ]
+    },
+    {
+      "theme": "AI반도체",
+      "stocks": [
+        {"code": "000660", "name": "SK하이닉스", "is_leader": true},
+        {"code": "005930", "name": "삼성전자", "is_leader": false}
+      ]
+    }
+  ],
+  "2026-05-02": [
+    {
+      "theme": "전력설비",
+      "stocks": [
+        {"code": "006340", "name": "대원전선", "is_leader": true}
+      ]
+    }
+  ]
+}

@@ -1,22 +1,50 @@
-name: Run main.py
+name: Saeiti V2 — 주도주 단타 봇 실행
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "거래 모드"
+        required: true
+        default: "가상매매"
+        type: choice
+        options:
+          - 가상매매
+          - 실거래
 
 jobs:
   run:
-    name: Run Python script
+    name: Run Saeiti V2
     runs-on: ubuntu-latest
+    timeout-minutes: 390  # 6시간 30분 (9:00 ~ 15:30 커버)
+    env:
+      KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}
+      KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}
+      KIS_ACCOUNT_NO: ${{ secrets.KIS_ACCOUNT_NO }}
+      IS_REAL_TRADING: ${{ inputs.mode == '실거래' && 'true' || 'false' }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      MAX_POSITIONS: ${{ vars.MAX_POSITIONS || '3' }}
+      TOTAL_CAPITAL: ${{ vars.TOTAL_CAPITAL || '10000000' }}
+
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt 2>/dev/null || echo "No requirements.txt found, skipping."
+        run: pip install -r requirements.txt
 
-      - name: Run main.py
+      - name: Run Saeiti V2
         run: python main.py
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trade-logs-${{ github.run_id }}
+          path: logs/
+          retention-days: 90
